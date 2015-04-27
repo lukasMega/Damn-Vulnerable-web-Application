@@ -12,7 +12,7 @@ import java.sql.*;
 
 @WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
 public class LoginServlet extends javax.servlet.http.HttpServlet {
-    private static final String QUERY = "SELECT * FROM user WHERE login=? AND password=?";
+    private static final String QUERY = "SELECT * FROM user WHERE login='%s' AND password='%s'";
 
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -33,6 +33,7 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
 
             stmt.setString(1, login);
             stmt.setString(2, password);
+            
 
             ResultSet rs = stmt.executeQuery();
 
