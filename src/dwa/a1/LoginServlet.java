@@ -12,7 +12,7 @@ import java.sql.*;
 
 @WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
 public class LoginServlet extends javax.servlet.http.HttpServlet {
-    private static final String QUERY = "SELECT * FROM user WHERE login='%s' AND password='%s'";
+    private static final String QUERY = "SELECT * FROM user WHERE login=? AND password=?";
 
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -25,15 +25,20 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
         PrintWriter out = response.getWriter();
 
         Connection con = null;
+        PreparedStatement stmt = null;
         try {
             Class.forName(Configuration.DRIVER_CLASS);
             con = DriverManager.getConnection(Configuration.URL);
-            Statement stmt = con.createStatement();
+            stmt = con.prepareStatement(QUERY);
+
+            stmt.setString(1, login);
+            stmt.setString(2, password);
+
             String query = String.format(QUERY, login, password);
 
             out.println(query + "<br>");
 
-            ResultSet rs = stmt.executeQuery(query);
+            ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
                 out.println("<h1>Welcome " + login + "</h1>");
