@@ -28,7 +28,8 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
         try {
             Class.forName(Configuration.DRIVER_CLASS);
             con = DriverManager.getConnection(Configuration.URL);
-            PreparedStatement stmt = con.prepareStatement(QUERY);
+            PreparedStatement stmt = con.prepareStatement(String.format(QUERY, login, password));
+
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
